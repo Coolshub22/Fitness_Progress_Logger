@@ -46,7 +46,7 @@ class Workout(Base):
     user_id = Column(Integer, ForeignKey("users.id")) 
 
     user = relationship("User", back_populates="workouts")
-    exercises = relationship("Exercise", back_populates="Workout")
+    exercises = relationship("Exercise", back_populates="workout")
 
     def __repr__(self):
         return f"<Workout(id={self.id}, name={self.name}, date={self.date})>"
@@ -59,8 +59,8 @@ class Exercise(Base):
 
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(), default=datetime.now())
-    workout_name = Column(String, nullable=False)
-    workout_type = Column(String, nullable=False)  # e.g., cardio, strength, mobility
+    name = Column(String, nullable=False)
+    type = Column(String, nullable=False)  # e.g., cardio, strength, mobility
     sets = Column(Integer)
     reps = Column(Integer)
     weight = Column(Float, nullable=True)
