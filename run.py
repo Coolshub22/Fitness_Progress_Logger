@@ -99,7 +99,7 @@ def add_workout():
         return
     
 
-    workout = Workout(name = name, intensity = intensity_val, notes = notes, user = user)
+    workout = Workout(workout_name = name, intensity = intensity_val, notes = notes, user = user)
     session.add(workout)
     session.commit()
     print("Workout added successfully.")
@@ -113,7 +113,7 @@ def update_workout():
         print("Oops! Workout not found.")
         return
     
-    name = input(f"New name (Leave blank to keep '{workout.name}'): ").strip()
+    name = input(f"New name (Leave blank to keep '{workout.workout_name}'): ").strip()
     intensity = input(f"New intensity (Leave blank to keep '{workout.intensity}'): ").strip()
     notes = input(f"New notes (Leave blank to keep the notes): ").strip()
 
@@ -139,7 +139,7 @@ def del_workout():
     if confirm == 'y':
         session.delete(workout)
         session.commit()
-        print("Workout added Successfully.")
+        print("Workout deleted Successfully.")
        
 
 # exercises
@@ -228,7 +228,7 @@ def exercises_menu():
         print("2. Add exercise")
         print("3. Update exercise")
         print("4. Delete exercise")
-        print("Back to main menu")
+        print("5. Back to main menu")
 
 
         choice = input("Choose an option: ").strip()
@@ -312,9 +312,9 @@ def main_menu():
         if choice == '1':
             users_menu()
         elif choice == '2':
-            pass
+            workouts_menu()
         elif choice == '3':
-            pass
+            exercises_menu()
         elif choice == '4':
             print("Thank you for visiting.")
             break
