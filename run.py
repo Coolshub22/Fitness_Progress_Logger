@@ -14,23 +14,21 @@ def list_users():
         return
     for user in users:
         print(f"ID: {user.id}, Username: {user.name}, Email: {user.email}")
-        print("-----------------------------------------------------------")
-    print("----------------------------------------------------------------")
-
+       
 
 # to add a user
 def add_user():
-    username = input("Username: ").strip()
+    name = input("Username: ").strip()
     email = input("Email: ").strip()
 
-    if session.query(User).filter_by(username = username).first():
+    if session.query(User).filter_by(name = name).first():
         print("Username already exists.")
         return
     
-    new_user = User(username = username, email = email)
+    new_user = User(name = name, email = email)
     session.add(new_user)
     session.commit()
-    print(f"User '{username}' added.")
+    print(f"User '{name}' added.")
 
 
 # update a user
@@ -80,9 +78,7 @@ def list_workouts():
         return
     for w in workouts:
         print(f"ID: {w.id}, Name: {w.workout_name}, Intensity: {w.intensity}")
-        print("--------------------------------------------------------------")
-    print("-----------(------------------------------------------------------------")
-
+       
 
 # add workout
 def add_workout():
@@ -107,8 +103,7 @@ def add_workout():
     session.add(workout)
     session.commit()
     print("Workout added successfully.")
-    print("-----------------------------------------------------------------------------")
-print("------------------------------------------------------------------------------------------------------------")
+    
 
 # update workout
 def update_workout():
@@ -145,9 +140,7 @@ def del_workout():
         session.delete(workout)
         session.commit()
         print("Workout added Successfully.")
-        print("------------------------------------------------")
-print("----------------------------------------------------------------------------------------------")
-
+       
 
 # exercises
 # list all exercises
@@ -158,10 +151,99 @@ def list_exercise():
         return
     for e in exercises:
         print(f"ID: {e.id}, Name: {e.name}, Type: {e.type}, Reps: {e.reps}, Sets: {e.sets},  Workout ID: {e.workout_id}")
-        print("----------------------------------------------------------------------------------------------------------")
-print("-----------------------------------------------------------------------------------------------------------")
+       
+def add_exercises():
+    workout_id = input("Enter Workout ID: ").strip()
+    workout = session.query(Workout).filter_by(id = workout_id).first()
+    if not workout:
+        print("Oops! Workout not found.")
+        return
+    name = input("Exercise name: ").strip()
+    type = input("Exercise type(Cardio,Strength,Flexibility,etc.): ").strip()
+    reps = input("Reps (or 0): ").strip()
+    sets = input("Sets (or 0): ").strip()
 
-def add_exercises
+
+    try:
+        reps = int(reps)
+        sets = int(sets)
+    except:
+        print("Invalid input for reps/sets.")
+        return
+    
+    exercise = Exercise(name = name, type = type, reps = reps, workout = workout)
+    session.add(exercise)
+    session.commit()
+    print("Exercise added Successfully.")
+    
+
+# update exercises
+def update_exercise():
+    ex_id = input("Enter Exercise ID to update: ").strip()
+    ex = session.query(Exercise).filter_by(id = ex_id).first()
+    if not ex:
+        print("Oops! Exercise not found.")
+        return
+    name = input(f"New name (Leave blank to keep '{ex.name}'): ").strip()
+    type_ = input(f"New type (Leave blank to keep '{ex.type}'): ").strip()
+    reps = input(f"New reps (Leave blank to keep '{ex.reps}'): ").strip()
+    sets = input(f"News sets (Leave blank to keep '{ex.sets}'): ").strip()
+
+
+    if name:
+        ex.name = name
+    if type_:
+        ex.type =type_
+    if reps:
+        ex.reps = int(reps)
+    if sets:
+        ex.sets = int(sets)
+
+    session.commit()
+    print("Exercise updated successfully.")
+
+# del exercise
+def del_exercise():
+    ex_id = input("Enter Exercise ID to delete: ").strip()
+    ex = session.query(Exercise).filter_by(id=ex_id).first()
+
+    if not ex:
+        print("Oops! Exercise not found.")
+        print("************************")
+        return
+    
+    confirm = input(f"Delete exercise '{ex.name}'? (y/n): ").strip().lower()
+
+    if confirm =='y':
+        session.delete(ex)
+        session.commit()
+        print("Exercise deleted Successfully.")
+
+
+# exercises menu
+def exercises_menu():
+    while True:
+        print("Exercises Menu:")
+        print("1. List all exercises")
+        print("2. Add exercise")
+        print("3. Update exercise")
+        print("4. Delete exercise")
+        print("Back to main menu")
+
+
+        choice = input("Choose an option: ").strip()
+        if choice == '1':
+            list_exercise()
+        elif choice == '2':
+            add_exercises()
+        elif choice == '3':
+            update_exercise()
+        elif choice == '4':
+            del_exercise()
+        elif choice == '5':
+            break
+        else:
+            print("Invalid choice. Try again.")
 
 # workouts menu
 def workouts_menu():
@@ -218,12 +300,13 @@ def users_menu():
 # main menu
 def main_menu():
     while True:
-        print("Main Menu:")
-        print("1. Users")
-        print("2. Workouts")
-        print("3. Exercises")
-        print("4. Exit")
-        
+        print("MAIN MENU:")
+        print("1. USERS")
+        print("2. WORKOUTS")
+        print("3. EXERCISES")
+        print("4. EXIT")
+
+           
 
         choice = input("Choose an option: ").strip()
         if choice == '1':
